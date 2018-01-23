@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="hjf-ssm:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="hjf-ssm.war">
+      <element id="artifact" artifact-name="hjf-ssm:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--映射接口-->
+<mapper namespace="com.hjf.mapper.VacationMapper">
+	<select id="findAllVacation" parameterType="vacation"
+		resultType="com.hjf.pojo.po.Vacation">
+		select * from vacation where applyerid = #{applyerid}
+	</select>
+	<insert id="insertVacation" parameterType="vacation">
+		INSERT INTO
+		VACATION(starttime,endtime,totalday,resons,applyerid,applyername,agreemanid,isagree)
+		VALUES(#{starttime},#{endtime},#{totalday},#{resons},#{applyerid},#{applyername},#{agreemanid},#{isagree})
+	</insert>
+	<select id="findAllVacationCheck" parameterType="int" resultType="com.hjf.pojo.po.Vacation">
+		select * from vacation where agreemanid=#{agreemanid}
+	</select>
+	<update id="updateVacationByVid" parameterType="int">
+	  	update vacation set isagree="已审核"  where vid= #{vid}
+	</update>
+	<select id="findVacationByVid" parameterType="int" resultType="com.hjf.pojo.po.Vacation">
+		select * from vacation where vid=#{vid}
+	</select>
+	<update id="updateVacationAllowByVid" parameterType="int">
+	  	update vacation set isagree="审核通过"  where vid= #{vid}
+	</update>
+	<update id="updateVacationRefuseByVid" parameterType="int">
+	  	update vacation set isagree="审核拒绝"  where vid= #{vid}
+	</update>
+</mapper>

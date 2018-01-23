@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--映射接口-->
+<mapper namespace="com.hjf.mapper.UserMapper">
+	
+	<select id="findByName" parameterType="com.hjf.pojo.po.User" resultType="com.hjf.pojo.po.User">
+		  select * from user where uname = #{uname}
+	</select>
+	
+	<update id="update" parameterType="com.hjf.pojo.po.User" >
+      update user
+      <set>
+      		<if test="nickname !=null and  nickname !=''">
+                        nickname=#{nickname},
+            </if>
+            <if test="uname !=null and  uname !=''">
+                        uname=#{uname},
+            </if>
+            <if test="password !=null and  password !=''">
+                        password=#{password},
+            </if>
+            <if test="uage !=null and  uage !=''">
+                        uage=#{uage},
+            </if>
+            <if test="ugender !=null and  ugender !=''">
+                        ugender=#{ugender},
+            </if>
+            <if test="uphone !=null and  uphone !=''">
+                        uphone=#{uphone},
+            </if>
+            <if test="uaddr !=null and  uaddr !=''">
+                        uaddr=#{uaddr},
+            </if>
+      </set> where uid = #{uid}
+  </update>
+  	<select id="findAllUser"  resultType="com.hjf.pojo.po.User">
+		  select * from user
+	</select>
+	<select id="findByUid" parameterType="com.hjf.pojo.po.User" resultType="com.hjf.pojo.po.User">
+		  select * from user where uid = #{uid}
+	</select>
+  
+    <select id="findAllManager" parameterType="com.hjf.pojo.po.User" resultType="com.hjf.pojo.po.User">
+		  select * from user where ismanage = "管理员"
+	</select>
+	<select id="findAllAccount" resultType="com.hjf.pojo.po.User">
+		  select * from user where ismanage != "管理员"
+	</select>
+	<update id="updateUserAccount" parameterType="com.hjf.pojo.po.User" >
+      update user
+      <set>
+      		<if test="nickname !=null and  nickname !=''">
+                        nickname=#{nickname},
+            </if>
+            <if test="uname !=null and  uname !=''">
+                        uname=#{uname},
+            </if>
+            <if test="password !=null and  password !=''">
+                        password=#{password},
+            </if>
+            <if test="uage !=null and  uage !=''">
+                        uage=#{uage},
+            </if>
+            <if test="ugender !=null and  ugender !=''">
+                        ugender=#{ugender},
+            </if>
+            <if test="uphone !=null and  uphone !=''">
+                        uphone=#{uphone},
+            </if>
+            <if test="uaddr !=null and  uaddr !=''">
+                        uaddr=#{uaddr},
+            </if>
+      </set> where uid = #{uid}
+  </update>
+  <insert id="insertUserAccount" parameterType="com.hjf.pojo.po.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="nickname != null">
+            nickname,
+        </if>
+        <if test="uname != null">
+            uname,
+        </if>
+        <if test="password != null">
+            password,
+        </if>
+        <if test="uage != null">
+            uage,
+        </if>
+        <if test="ugender != null">
+            ugender,
+        </if>
+        <if test="uphone != null">
+            uphone,
+        </if>
+        <if test="uaddr != null">
+            uaddr,
+        </if>
+         <if test="ismanage != null">
+            ismanage,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="nickname != null">
+            #{nickname},
+        </if>
+        <if test="uname != null">
+            #{uname},
+        </if>
+        <if test="password != null">
+            #{password},
+        </if>
+        <if test="uage != null">
+            #{uage},
+        </if>
+        <if test="ugender != null">
+            #{ugender},
+        </if>
+         <if test="uphone != null">
+            #{uphone},
+        </if>
+        <if test="uaddr != null">
+            #{uaddr},
+        </if>
+        <if test="ismanage != null">
+            #{ismanage},
+        </if>
+    </trim>
+</insert>
+</mapper>

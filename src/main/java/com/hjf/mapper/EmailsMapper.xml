@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--映射接口 -->
+<mapper namespace="com.hjf.mapper.EmailsMapper">
+
+	<insert id="insertEmails" parameterType="Emails">
+		INSERT INTO
+		EMAILS(etitle,econtext,enclosure,senderid,reciverid,sendtime,istrash,isread)
+		VALUES(#{etitle},#{econtext},#{enclosure},#{senderid},#{reciverid},#{sendtime},#{istrash},#{isread})
+	</insert>
+	<select id="findAllEmails" parameterType="emails"
+		resultType="com.hjf.pojo.po.Emails">
+		select * from emails where reciverid = #{reciverid} and istrash="not"
+	</select>
+	<update id="delteteByEid" parameterType="emails">
+	  	update emails set istrash="is" where eid= #{eid}
+	</update>
+	<select id="findTrashEmails" parameterType="emails"
+		resultType="com.hjf.pojo.po.Emails">
+		select * from emails where reciverid = #{reciverid} and istrash="is"
+	</select>
+	<delete id="deleteByEidReal" parameterType="emails">
+	  	delete from emails where eid=#{eid}
+	</delete>
+	<update id="updateByEid" parameterType="emails">
+	  	update emails set istrash="not"  where eid= #{eid}
+	</update>
+	<update id="updateByEidRead" parameterType="emails">
+	  	update emails set isread="已读"  where eid= #{eid}
+	</update>
+	<select id="findEmailsByEid" parameterType="emails"
+		resultType="com.hjf.pojo.po.Emails">
+		select * from emails where eid = #{eid}
+	</select>
+</mapper>

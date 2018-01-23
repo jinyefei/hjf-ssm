@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+    	http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+    	http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+    	http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+    	http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        ">
+	<!-- 开启Spring组件扫描 -->
+	<context:component-scan base-package="com.hjf.action"/>
+	
+	<!-- 开启SpringMVC注解 -->
+	<!-- 跟重要注解有关@RequestMapping @ResponseBody有关 -->
+	<mvc:annotation-driven/>
+	
+	<!-- 添加视图解析器 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	<!-- 静态资源放行，否则就会进入action -->
+	<!-- location就是指本地工程中的静态资源的位置 -->
+	<!-- mapping就是指URL地址中的映射 -->
+	
+	<mvc:resources location="/Images/" mapping="/Images/**"/>
+	<mvc:resources location="/imgs/" mapping="/imgs/**"/>	
+	<mvc:resources location="/js/" mapping="/js/**"/>	
+	<mvc:resources location="/css/" mapping="/css/**"/>	
+	
+	
+	<!-- 
+	 配置拦截器 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/**"/>
+			<bean class="com.qf.mymvc.interceptor.MyInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	4 文件上传解析器
+    文件上传依赖jar，pom文件添加依赖
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+        <property name="maxUploadSize">
+            9M
+            <value>9437184</value>
+        </property>
+        <property name="maxInMemorySize">
+            <value>4096</value>
+        </property>
+    </bean> -->
+	
+	
+</beans>
