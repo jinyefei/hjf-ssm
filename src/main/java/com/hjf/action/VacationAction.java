@@ -14,11 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.hjf.pojo.po.Emails;
 import com.hjf.pojo.po.User;
 import com.hjf.pojo.po.Vacation;
 import com.hjf.service.IUserService;
 import com.hjf.service.IVacationService;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 @Controller
 @RequestMapping(value="/user")
 public class VacationAction {
@@ -58,34 +59,54 @@ public class VacationAction {
 		 *发送申请假期报告
 		 */
 		@RequestMapping(value="/saveVacation.action",produces="plain/text;charset=UTF-8")
-		/*@ResponseBody 上传下载文件可用*/
+		@ResponseBody
 		public String doSaveVacation(Vacation vacation,HttpSession session){
 			//手动封装默认的剩余属性
-			Date sendtime1=new Date();
-			Date sendtime2=new Date();
-			vacation.setStarttime(sendtime1);
-			vacation.setEndtime(sendtime2);
+			Date sendtime1;
+			Date sendtime2;
+			Date timenow=new Date();
+			Integer totalday=0;
 			vacation.setIsagree("未审核");
 			//计算总天数
 			final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				sendtime1 = sdf.parse(sdf.format(sendtime1));
-				sendtime2 = sdf.parse(sdf.format(sendtime2));
+
+				sendtime1 = sdf.parse(vacation.getStarttime());
+				sendtime2 = sdf.parse(vacation.getEndtime());
+				timenow=sdf.parse(sdf.format(timenow));
+
+				final Calendar cal = Calendar.getInstance();
+
+				cal.setTime(sendtime1);
+				final long time1 = cal.getTimeInMillis();
+				cal.setTime(sendtime2);
+				final long time2 = cal.getTimeInMillis();
+				cal.setTime(timenow);
+				final long time3 = cal.getTimeInMillis();
+				if(time1<time3){
+					if(time2<time3){
+						return "3";//开始、结束日期有误！
+					}
+					return "2";//开始日期有误！
+				}
+				final long between_days = (time2 - time1) / (1000 * 3600 * 24);
+				totalday=Integer.parseInt(String.valueOf(between_days))+1;
+
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			
-	        final Calendar cal = Calendar.getInstance();
-	        cal.setTime(sendtime1);
-	        final long time1 = cal.getTimeInMillis();
-	        cal.setTime(sendtime2);
-	        final long time2 = cal.getTimeInMillis();
-	        final long between_days = (time2 - time1) / (1000 * 3600 * 24);
-	        Integer totalday=Integer.parseInt(String.valueOf(between_days));
-	        vacation.setTotalday(totalday);
-	        
-	        vser.insertVacation(vacation);
-			return "redirect:/user/leave.action";
+			Integer vtotalday=vacation.getTotalday();
+			if(totalday == vtotalday){
+				if(totalday>0){
+					vacation.setTotalday(totalday);
+					vser.insertVacation(vacation);
+					return "1";//请求通过
+				}else{
+					return "0";//结束日期不能大于开始日期！
+				}
+			}else{
+				return "4";//请假天数输入有误！
+			}
 		}
 		
 		/*

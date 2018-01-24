@@ -9,6 +9,12 @@
 <link href="${pageContext.request.contextPath}/css/style.css"
 	rel="stylesheet" type="text/css" />
 
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
 </head>
 
 <body>
@@ -27,7 +33,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
-	<form id="myForm" name="myForm" action="${pageContext.request.contextPath}/user/saveVacation.action"
+	<form id="myForm" name="myForm"
 		method="post">
 		<input type="hidden" name="u.id" value="26" /> <input type="hidden"
 			name="u.sex" value="2" id="u_sex" /> <input type="hidden"
@@ -43,6 +49,11 @@
 <title>办公自动化管理系统</title>
 <link href="${pageContext.request.contextPath}/css/style.css"
 	rel="stylesheet" type="text/css" />
+
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.validate.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/messages_zh.js"></script>
+
 </head>
 
 <body>
@@ -106,84 +117,46 @@
 							<tr>
 								<td align="right" width="30%">姓名：</td>
 								<td align="left"><input type="text" name="applyername"
-									value="${sessionUser.uname }" id="uname" /> <span
+								readonly="readonly"	value="${sessionUser.uname }" id="uname" /> <span
 									id="uname_span"></span></td>
 							</tr>
+							<script src="${pageContext.request.contextPath}/laydate/laydate.js"></script>
+							<script>
+                                lay('#version').html('-v'+ laydate.v);
+
+                                //执行一个laydate实例
+                                laydate.render({
+                                    elem: '#starttime' //指定元素
+                                });
+							</script>
+							<script>
+                                lay('#version').html('-v'+ laydate.v);
+
+                                //执行一个laydate实例
+                                laydate.render({
+                                    elem: '#endtime' //指定元素
+                                });
+							</script>
 							<tr>
-								<td align="right" width="30%" name="starttime">开始时间：</td>
+								<td align="right" width="30%" >开始时间：</td>
 								<td align="left">
-										<div class="right">
-											<select id="startyear" onchange="nianyue(this.value)" name="startyear">
-												<script>
-													for (i = 2018; i < 2118; i++) {
-														document
-																.write("<option value='"+i+"'>"
-																		+ i
-																		+ "</option>")
-													}
-												</script>
-											</select> 年 <select id="startmonth" onchange="yueri(this.value)"
-												name="startmonth">
-												<script>
-													for (i = 1; i <= 12; i++) {
-														document
-																.write("<option value='"+i+"'>"
-																		+ i
-																		+ "</option>")
-													}
-												</script>
-											</select> 月 <select id="startday" name="startday">
-												<script>
-													for (i = 1; i <= 31; i++) {
-														document
-																.write("<option value='"+i+"'>"
-																		+ i
-																		+ "</option>")
-													}
-												</script>
-											</select> 日
-										</div>
-										</td>
+									<input type="text"  id="starttime" name="starttime"><font color="red">*</font>
+									<span id="starttime_span" name="starttime_span"></span>
+								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">结束时间：</td>
 								<td align="left">
-										<div class="right" id="endtime">
-											<select id="endyear" onchange="nianyue(this.value)" name="endyear">
-												<script>
-													for (i = 2018; i < 2118; i++) {
-														document
-																.write("<option value='"+i+"'>"
-																		+ i
-																		+ "</option>")
-													}
-												</script>
-											</select> 年 <select id="endmonth" onchange="yueri(this.value)"
-												name="endmonth">
-												<script>
-													for (i = 1; i <= 12; i++) {
-														document
-																.write("<option value='"+i+"'>"
-																		+ i
-																		+ "</option>")
-													}
-												</script>
-											</select> 月 <select id="endday" name="endday">
-												<script>
-													for (i = 1; i <= 31; i++) {
-														document
-																.write("<option value='"+i+"'>"
-																		+ i
-																		+ "</option>")
-													}
-												</script>
-											</select> 日
-										</div> 
-										</td>
+									<input type="text"  id="endtime" name="endtime"><font color="red">*</font>
+									<span id="endtime_span" name="endtime_span"></span>
+								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">请假天数：</td>
-								<td align="left"></td>
+								<td align="left">
+									<input type="text"  id="totalday" name="totalday"><font color="red">*</font>
+									<span id="totalday_span" name="totalday_span"></span>
+								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">请假原因：</td>
@@ -208,8 +181,8 @@
 							<tr>
 								<td align="left" style="padding-left: 242px;" colspan="2"><br />
 									<input type="hidden" name="applyerid" value="${sessionUser.uid}">
-									<input type="button" id="save" value="提交申请"
-									onclick="return check()" /> <input type="button" id="back"
+									<input type="submit" id="save" value="提交申请"/>
+									<input type="button" id="back"
 									value="返回" onclick="location='${pageContext.request.contextPath}/user/leave.action' " /></td>
 							</tr>
 
@@ -223,87 +196,51 @@
 	<div class="copyright">Copyright &nbsp; &copy; &nbsp;</div>
 
 </body>
-<script>
-	function check() {
-		var r1 = checkName('uname', '昵称不能为空');
-		
-		if (r1) {
-			document.forms[0].submit();
-			return true;
-		} else {
-			return false;
-		}
-	}
-	function checkName(id, info) {
-		var span = document.getElementById(id + "_span");
-		span.innerHTML = "";
-		var ele = document.getElementById(id);
-		if (ele.value == "") {
-			span.innerHTML = "<font style='color:red;font-size:12px;'>" + info
-					+ "</font>";
-			return false;
-		}
-		return true;
-	}
+
+<script type="text/javascript">
+    $(function() {
+        $("#myForm").validate({
+            rules : {
+                uname : "required",
+                starttime : "required",
+                endtime : "required",
+				totalday: "required"
+            },
+            messages : {
+                uname : "姓名不能为空",
+                starttime : "开始日期不能为空",
+                endtime : "结束日期不能为空",
+                totalday : "请假天数不能为空"
+            },
+            submitHandler : function() {
+                //提交Ajax
+                $.ajax({
+                    data : $("#myForm").serialize(),
+                    dataType : "text",
+                    type : "post",
+                    url : "${pageContext.request.contextPath}/user/saveVacation.action",
+                    success : function(rec) {
+                        if(rec=="1"){
+                            location.href = "${pageContext.request.contextPath}/user/leave.action"
+                        }else if(rec=="0"){
+                            $("#endtime_span").html("结束日期不能早于开始日期！");
+                        }else if(rec=="2"){
+                            $("#starttime_span").html("开始日期不能早于今天！");
+						}else if(rec=="3"){
+                            $("#starttime_span").html("开始日期不能早于今天！");
+                            $("#endtime_span").html("结束日期不能早于今天！");
+						}else{
+                            $("#totalday_span").html("请假总计天数输入有误！");
+						}
+                    },
+					error:function () {
+						alert('服务器已断开！')
+                    }
+                });
+            }
+        });
+    })
+
 </script>
-<script>
-			var num;
-			function nianyue(val){
-				num=val;
-			}
-			function yueri(nval){
-				var day=document.getElementById("startday");
-				day.length=0;
-				var daylist=new Array();
-				if(nval==1||nval==3||nval==5||nval==7||nval==8||nval==10||nval==12){
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31);
-				}
-				if(nval==4||nval==6||nval==9||nval==11){
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30);
-				}
-				if(nval==2){
-					if((num%4===0&&num%100!==0)||num%400===0){
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29);
-					}else{
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28);
-					}	
-				}
-				for(var i=0;i<daylist[nval].length;i++){
-					var textNode = document.createTextNode(daylist[nval][i]);
-					var optNode = document.createElement("option");
-					optNode.appendChild(textNode);
-					day.appendChild(optNode);
-				}
-			}
-		</script>
-<script>
-			var num;
-			function nianyue(val){
-				num=val;
-			}
-			function yueri(nval){
-				var day=document.getElementById("endday");
-				day.length=0;
-				var daylist=new Array();
-				if(nval==1||nval==3||nval==5||nval==7||nval==8||nval==10||nval==12){
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31);
-				}
-				if(nval==4||nval==6||nval==9||nval==11){
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30);
-				}
-				if(nval==2){
-					if((num%4===0&&num%100!==0)||num%400===0){
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29);
-					}else{
-					daylist[nval]=new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28);
-					}	
-				}
-				for(var i=0;i<daylist[nval].length;i++){
-					var textNode = document.createTextNode(daylist[nval][i]);
-					var optNode = document.createElement("option");
-					optNode.appendChild(textNode);
-					day.appendChild(optNode);
-				}
-			}
-		</script>
+
 </html>

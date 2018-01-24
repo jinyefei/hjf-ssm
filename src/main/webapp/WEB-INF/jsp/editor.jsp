@@ -106,7 +106,7 @@
 							<tr>
 								<td align="right" width="30%">昵称：</td>
 								<td align="left"><input type="text" name="nickname"
-									value="${sessionUser.nickname }" id="nickname" /> <span
+									value="${sessionUser.nickname }" id="nickname" /><font color="red">*</font> <span
 									id="nickname_span"></span></td>
 
 							</tr>
@@ -128,7 +128,7 @@
 							<tr>
 								<td align="right" width="30%">手机：</td>
 								<td align="left"><input type="text" name="uphone"
-									value="${sessionUser.uphone}" id="uphone" /> <span
+									value="${sessionUser.uphone}" id="uphone" /><font color="red">*</font> <span
 									id="uphone_span"></span></td>
 							</tr>
 							<tr>

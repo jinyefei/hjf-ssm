@@ -32,35 +32,39 @@
 	<!-- mapping就是指URL地址中的映射 -->
 	
 	<mvc:resources location="/Images/" mapping="/Images/**"/>
-	<mvc:resources location="/imgs/" mapping="/imgs/**"/>	
 	<mvc:resources location="/js/" mapping="/js/**"/>	
-	<mvc:resources location="/css/" mapping="/css/**"/>	
-	
-	
-	<!-- 
-	 配置拦截器 
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/user/**"/>
-			<bean class="com.qf.mymvc.interceptor.MyInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors>
-	
-	4 文件上传解析器
-    文件上传依赖jar，pom文件添加依赖
-    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="defaultEncoding">
-            <value>UTF-8</value>
-        </property>
-        <property name="maxUploadSize">
-            9M
-            <value>9437184</value>
-        </property>
-        <property name="maxInMemorySize">
-            <value>4096</value>
-        </property>
-    </bean> -->
-	
-	
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/laydate/" mapping="/laydate/**"/>
+
+
+	<!--4 文件上传解析器
+    文件上传依赖jar，pom文件添加依赖-->
+
+	<!--multipartResolver配置-->
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		  p:defaultEncoding="UTF-8"
+		  p:maxUploadSize="9437184"
+		  p:maxInMemorySize="9437184"
+		  p:uploadTempDir="file:/d:/temp"
+	/>
+
+	<!-- 设置json和response的字符编码 -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<ref bean="stringHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/plain;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+
 </beans>

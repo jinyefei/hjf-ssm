@@ -121,22 +121,23 @@
 								<tr>
 									<td align="center" width="14%" height="20px">
 										${vacation.applyername}</td>
-									<td align="center" width="14%" height="20px"><fmt:formatDate
-											value="${vacation.starttime}" pattern="yyyy-MM-dd" /></td>
-									<td align="center" width="14%" height="20px"><fmt:formatDate
-											value="${vacation.endtime}" pattern="yyyy-MM-dd" /></td>
+									<td align="center" width="14%" height="20px">
+											${vacation.starttime}</td>
+									<td align="center" width="14%" height="20px">
+											${vacation.endtime}</td>
 									<td align="center" width="14%" height="20px">
 										${vacation.totalday}</td>
 									<td align="center" width="14%" height="20px">
 										${vacation.isagree}</td>
 									<td align="center" width="14%" height="20px">
 										${vacation.resons}</td>
-									<c:if test="${sessionUser.ismanage eq '管理员'}">
-									<td align="center" width="16%" height="20px">
-									<input type="button"
-											onclick="window.location.href='${pageContext.request.contextPath}/user/checkVacation.action/${vacation.vid}'"
-											value="[审核]">
-									</td>
+
+									<c:if test="${sessionUser.ismanage eq '管理员'&& sessionUser.uid != vacation.applyerid}">
+										<td align="center" width="16%" height="20px">
+											<input type="button"
+												   onclick="window.location.href='${pageContext.request.contextPath}/user/checkVacation.action/${vacation.vid}'"
+												   value="[审核]">
+										</td>
 									</c:if>
 								</tr>
 							</c:forEach>

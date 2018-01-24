@@ -112,23 +112,20 @@
 								<td align="right" width="30%">用户名：</td>
 								<td align="left"><input type="text" name="uname"
 								 id="uname" /><span
-									id="uname_span"></span><span
-                                        id="mess"></span>
+										id="mess"></span>
 								</td>
                         
 							</tr>
 							<tr>
 								<td align="right" width="30%">密码：</td>
 								<td align="left"><input type="password" name="password"
-									 id="password" /><span
-									id="password_span"></span>
+									 id="password" />
 								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">昵称：</td>
 								<td align="left"><input type="text" name="nickname"
-								 id="nickname" /><span
-									id="nickname_span"></span>
+								 id="nickname" />
 								</td>
                         
 							</tr>

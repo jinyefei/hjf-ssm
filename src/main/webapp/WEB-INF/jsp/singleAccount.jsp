@@ -106,14 +106,14 @@
 							<tr>
 								<td align="right" width="30%">用户名：</td>
 								<td align="left"><input type="text" name="uname"
-									 value="${sessionUser.uname }" id="uname" />
+									 value="${sessionUser.uname }" id="uname" /><font color="red">*</font>
 								</td>
                         
 							</tr>
 							<tr>
 								<td align="right" width="30%">密码：</td>
 								<td align="left"><input type="password" name="password"
-									 value="${sessionUser.password }" id="password" />
+									 value="${sessionUser.password }" id="password" /><font color="red">*</font>
 								</td>
 							</tr>
 							

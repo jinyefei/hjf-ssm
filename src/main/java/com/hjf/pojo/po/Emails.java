@@ -24,12 +24,15 @@ public class Emails {
 	public void setEcontext(String econtext) {
 		this.econtext = econtext;
 	}
+
 	public String getEnclosure() {
 		return enclosure;
 	}
+
 	public void setEnclosure(String enclosure) {
 		this.enclosure = enclosure;
 	}
+
 	public Integer getSenderid() {
 		return senderid;
 	}

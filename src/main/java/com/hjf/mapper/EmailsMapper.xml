@@ -6,10 +6,86 @@
 <mapper namespace="com.hjf.mapper.EmailsMapper">
 
 	<insert id="insertEmails" parameterType="Emails">
-		INSERT INTO
-		EMAILS(etitle,econtext,enclosure,senderid,reciverid,sendtime,istrash,isread)
-		VALUES(#{etitle},#{econtext},#{enclosure},#{senderid},#{reciverid},#{sendtime},#{istrash},#{isread})
+		insert into EMAILS
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="etitle != null">
+				etitle,
+			</if>
+			<if test="econtext != null">
+				econtext,
+			</if>
+			<if test="enclosure != null">
+				enclosure,
+			</if>
+			<if test="senderid != null">
+				senderid,
+			</if>
+			<if test="reciverid != null">
+				reciverid,
+			</if>
+			<if test="sendtime != null">
+				sendtime,
+			</if>
+			<if test="istrash != null">
+				istrash,
+			</if>
+			<if test="isread != null">
+				isread,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="etitle != null">
+				#{etitle},
+			</if>
+			<if test="econtext != null">
+				#{econtext},
+			</if>
+			<if test="enclosure != null">
+				#{enclosure},
+			</if>
+			<if test="senderid != null">
+				#{senderid},
+			</if>
+			<if test="reciverid != null">
+				#{reciverid},
+			</if>
+			<if test="sendtime != null">
+				#{sendtime},
+			</if>
+			<if test="istrash != null">
+				#{istrash},
+			</if>
+			<if test="isread != null">
+				#{isread},
+			</if>
+		</trim>
 	</insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<select id="findAllEmails" parameterType="emails"
 		resultType="com.hjf.pojo.po.Emails">
 		select * from emails where reciverid = #{reciverid} and istrash="not"

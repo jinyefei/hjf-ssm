@@ -21,8 +21,7 @@
 	</div>
 	<div class="status">
 		<div class="global-width">
-			${sessionUser.nickname },
-			你好！欢迎访问办公管理系统！&nbsp;<a  href="#" onclick="location.href='${pageContext.request.contextPath}/user/loginOut.action'">注销</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			${sessionUser.nickname },你好！欢迎访问办公管理系统！&nbsp;<a  href="#" onclick="location.href='${pageContext.request.contextPath}/user/loginOut.action'">注销</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -109,7 +108,7 @@
 							<tr>
 								<td align="right" width="30%">邮件标题：</td>
 								<td align="left"><input type="text" name="etitle"
-									 id="etitle" value="${emails.etitle}"/>
+									 id="etitle" readonly="readonly" value="${emails.etitle}"/>
 									 </td>
 							</tr>
 							<tr>
@@ -127,17 +126,32 @@
 							<tr>
 								<td align="right" width="30%"  >来自：</td>
 								<td align="left"><input type="text" name="uname"
-									 id="uname" value="${findUser.uname}"/>
+									 id="uname" readonly="readonly" value="${findUser.uname}"/>
 									  </td>
 							</tr>
 							<tr>
 								<td align="right" width="30%"  >文件：</td>
-								<td align="left"><a href="${pageContext.request.contextPath}/user/fileDownLoad.action/${emails.eid}" target="_self">下载</a>
-									  </td>
+								<td align="left">
+
+									<c:if test="${emails.enclosure eq '无附件'}">
+										<a href="#" target="_self">无附件</a>
+									</c:if>
+
+									<c:if test="${emails.enclosure !='无附件'}">
+									<a href="${pageContext.request.contextPath}/user/fileDownLoad.action/${emails.eid}" target="_self">下载附件</a>
+								 	</c:if>
+								</td>
 							</tr>
 							<tr>
-								<td align="right" width="30%"  ><a href="${pageContext.request.contextPath}/user/mailGarage!garage.action" target="_self">返回</a>
-									  </td>
+								<td align="center" width="30%"  colspan="2">
+									<c:if test="${emails.istrash eq 'is'}">
+										<input type="button" onclick="window.location.href='${pageContext.request.contextPath}/user/mailGarage!garage.action'" value="返回">
+									</c:if>
+
+									<c:if test="${emails.istrash eq 'not'}">
+										<input type="button" onclick="window.location.href='${pageContext.request.contextPath}/user/mailReceive!receive.action'" value="返回">
+									</c:if>
+								</td>
 							</tr>
 
 						</table>

@@ -112,15 +112,13 @@
 							<tr>
 								<td align="right" width="30%" name="starttime">开始时间：</td>
 								<td align="left">
-									<fmt:formatDate
-								value="${findVacation.starttime}" pattern="yyyy-MM-dd" />
+									${findVacation.starttime}
 								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">结束时间：</td>
 								<td align="left">
-									<fmt:formatDate
-								value="${findVacation.endtime}" pattern="yyyy-MM-dd HH:mm:ss" />
+									${findVacation.endtime}
 								</td>
 							</tr>
 							<tr>

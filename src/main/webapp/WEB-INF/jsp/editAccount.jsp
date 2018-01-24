@@ -109,6 +109,7 @@
 								<td align="right" width="30%">用户名：</td>
 								<td align="left"><input type="text" name="uname"
 									readonly="readonly" value="${sessionUser.uname }" id="uname" />
+
 								</td>
                         
 							</tr>

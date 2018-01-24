@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Vacation {
 	private Integer vid;
-	private Date starttime;
-	private Date endtime;
+	private String starttime;
+	private String endtime;
 	private Integer totalday;
 	private String resons;
 	private Integer applyerid;
@@ -19,18 +19,23 @@ public class Vacation {
 	public void setApplyername(String applyername) {
 		this.applyername = applyername;
 	}
-	public Date getStarttime() {
+
+	public String getStarttime() {
 		return starttime;
 	}
-	public void setStarttime(Date starttime) {
+
+	public void setStarttime(String starttime) {
 		this.starttime = starttime;
 	}
-	public Date getEndtime() {
+
+	public String getEndtime() {
 		return endtime;
 	}
-	public void setEndtime(Date endtime) {
+
+	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
+
 	public Integer getApplyerid() {
 		return applyerid;
 	}
