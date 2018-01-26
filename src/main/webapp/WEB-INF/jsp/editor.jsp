@@ -62,7 +62,13 @@
 				onclick="this.parentNode.className=this.parentNode.className=='open'?'':'open';">
 				邮件管理</dt>
 			<dd>
+				<a href="${pageContext.request.contextPath}/user/draftBox.action" target="_self">草稿箱</a>
+			</dd>
+			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailWrite.action" target="_self">写邮件</a>
+			</dd>
+			<dd>
+				<a href="${pageContext.request.contextPath}/user/hadSendEmails.action" target="_self">已发邮件</a>
 			</dd>
 			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailReceive!receive.action" target="_self">收邮件</a>
@@ -159,9 +165,9 @@
 <script>
 	function check() {
 		var r1 = checkNickname('nickname', '昵称不能为空');
-		var r2 = checkphone('uphone', '手机号码格式有误');
-		if (r1 && r2) {
-			document.forms[0].submit();
+		var r2 = checkphone1('uphone', '手机号码不能为空');
+        var r3 = checkphone2('uphone', '手机号码格式有误');
+		if (r1 && r2&&r3) {
 			return true;
 		} else {
 			return false;
@@ -178,7 +184,18 @@
 		}
 		return true;
 	}
-	function checkphone(id, info) {
+    function checkphone1(id, info) {
+        var span = document.getElementById(id + "_span");
+        span.innerHTML = "";
+        var ele = document.getElementById(id);
+        if (ele.value == "") {
+            span.innerHTML = "<font style='color:red;font-size:12px;'>" + info
+                + "</font>";
+            return false;
+        }
+        return true;
+    }
+	function checkphone2(id, info) {
 		var ele = document.getElementById(id);
 		if (ele.value != "") {
 			var span = document.getElementById(id + "_span");

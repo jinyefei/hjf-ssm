@@ -23,6 +23,12 @@
 			<if test="reciverid != null">
 				reciverid,
 			</if>
+			<if test="sendername != null">
+				sendername,
+			</if>
+			<if test="recivername != null">
+				recivername,
+			</if>
 			<if test="sendtime != null">
 				sendtime,
 			</if>
@@ -31,6 +37,9 @@
 			</if>
 			<if test="isread != null">
 				isread,
+			</if>
+			<if test="isinbox != null">
+				isinbox,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -49,6 +58,12 @@
 			<if test="reciverid != null">
 				#{reciverid},
 			</if>
+			<if test="sendername != null">
+				#{sendername},
+			</if>
+			<if test="recivername != null">
+				#{recivername},
+			</if>
 			<if test="sendtime != null">
 				#{sendtime},
 			</if>
@@ -58,44 +73,31 @@
 			<if test="isread != null">
 				#{isread},
 			</if>
+			<if test="isinbox != null">
+				#{isinbox},
+			</if>
 		</trim>
 	</insert>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	<select id="findAllEmailsBox" parameterType="emails"
+			resultType="com.hjf.pojo.po.Emails">
+		select * from emails where senderid = #{senderid} and isinbox="is"
+	</select>
+	<select id="findAllEmailsNotBox" parameterType="emails"
+			resultType="com.hjf.pojo.po.Emails">
+		select * from emails where senderid = #{senderid} and isinbox="not"
+	</select>
 
 	<select id="findAllEmails" parameterType="emails"
 		resultType="com.hjf.pojo.po.Emails">
-		select * from emails where reciverid = #{reciverid} and istrash="not"
+		select * from emails where reciverid = #{reciverid} and istrash="not" and isinbox="not"
 	</select>
 	<update id="delteteByEid" parameterType="emails">
 	  	update emails set istrash="is" where eid= #{eid}
 	</update>
 	<select id="findTrashEmails" parameterType="emails"
 		resultType="com.hjf.pojo.po.Emails">
-		select * from emails where reciverid = #{reciverid} and istrash="is"
+		select * from emails where reciverid = #{reciverid} and istrash="is" and isinbox="not"
 	</select>
 	<delete id="deleteByEidReal" parameterType="emails">
 	  	delete from emails where eid=#{eid}
@@ -110,4 +112,42 @@
 		resultType="com.hjf.pojo.po.Emails">
 		select * from emails where eid = #{eid}
 	</select>
+	<update id="updateByEidInBox" parameterType="com.hjf.pojo.po.Emails" >
+		update emails
+		<set>
+			<if test="etitle !=null and  etitle !=''">
+				etitle=#{etitle},
+			</if>
+			<if test="econtext !=null and  econtext !=''">
+				econtext=#{econtext},
+			</if>
+			<if test="enclosure !=null and  enclosure !=''">
+				enclosure=#{enclosure},
+			</if>
+			<if test="senderid !=null">
+				senderid=#{senderid},
+			</if>
+			<if test="reciverid !=null">
+				reciverid=#{reciverid},
+			</if>
+			<if test="sendername !=null and  sendername !=''">
+				sendername=#{sendername},
+			</if>
+			<if test="recivername !=null and  recivername !=''">
+				recivername=#{recivername},
+			</if>
+			<if test="sendtime !=null">
+				sendtime=#{sendtime},
+			</if>
+			<if test="istrash !=null and  istrash !=''">
+				istrash=#{istrash},
+			</if>
+			<if test="isread !=null and  isread !=''">
+				isread=#{isread},
+			</if>
+			<if test="isinbox !=null and  isinbox !=''">
+				isinbox=#{isinbox},
+			</if>
+		</set> where eid = #{eid}
+	</update>
 </mapper>

@@ -19,7 +19,12 @@ public class UserServiceImpl implements IUserService{
 	public User findByName(User user){
 		return mapper.findByName(user);
 	}
-	
+
+	@Override
+	public User findByNameOwn(User user) {
+		return mapper.findByNameOwn(user);
+	}
+
 	@Override
 	public void updateUser(User user) {
 		mapper.update(user);
@@ -55,5 +60,10 @@ public class UserServiceImpl implements IUserService{
 		mapper.insertUserAccount(user);
 	}
 
-	
+	@Override
+	public void deleteByUid(User user) {
+		mapper.deleteByUid(user);
+	}
+
+
 }

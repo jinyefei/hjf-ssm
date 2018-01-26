@@ -40,7 +40,96 @@ public class EmailsAction {
 		session.setAttribute("userList", userList);
 		return "writeEmails";
 	}
-	
+	/*
+	 * 转到邮件草稿箱
+	 */
+	@RequestMapping("/draftBox.action")
+	public String toEmailsDraftBox(HttpSession session){
+
+		User findUser=(User) session.getAttribute("sessionUser");
+			Integer senderid=findUser.getUid();
+			Emails emails=new Emails();
+			emails.setSenderid(senderid);
+			List<Emails> boxEmailsList=eser.findAllEmailsBox(emails);
+
+			session.setAttribute("boxEmailsList", boxEmailsList);
+
+		return "emailsDraftBox";
+	}
+	/*
+	 * 转到邮件已发箱
+	 */
+	@RequestMapping("/hadSendEmails.action")
+	public String tosendedEmails(HttpSession session){
+
+		User findUser=(User) session.getAttribute("sessionUser");
+			Integer senderid=findUser.getUid();
+			Emails emails=new Emails();
+			emails.setSenderid(senderid);
+			List<Emails> sendedEmailsList=eser.findAllEmailsNotBox(emails);
+
+			session.setAttribute("sendedEmailsList", sendedEmailsList);
+
+		return "sendedEmails";
+	}
+	/*
+	 * 阅读指定已发邮件
+	 */
+	@RequestMapping("/sendMailRead.action/{eid}")
+	public String sendedEmailsRead(@PathVariable(value = "eid") Integer eid,HttpSession session){
+		Emails sendedemails=new Emails();
+		sendedemails.setEid(eid);
+		sendedemails=eser.findEmailsByEid(sendedemails);
+		session.setAttribute("sendedemails", sendedemails);
+
+		return "readSendedEmail";
+	}
+	/*
+	 * 保存邮件到草稿箱
+	 */
+
+	@RequestMapping(value="/saveEmailsToBox.action",produces="plain/text;charset=UTF-8")
+	public  String saveEmailsToBox(@RequestParam("file")MultipartFile file,Emails emails,User user,HttpSession session) throws IOException {
+		//接收上传部分提交的数据,包含文件
+		if(emails.getEnclosure()==null||emails.getEnclosure()==""){
+			emails.setEnclosure("无附件");
+		}
+		if (!file.isEmpty())
+		{
+			file.transferTo(new File("D:/temp/"+file.getOriginalFilename()));
+			emails.setEnclosure(file.getOriginalFilename());
+		}
+		//手动封装默认的剩余属性
+		Date sendtime=new Date();
+		emails.setSendtime(sendtime);
+		Integer uid=emails.getReciverid();
+		User reciver=new User();
+		reciver.setUid(uid);
+		String recivername=	ser.findByUid(reciver).getUname();
+		emails.setRecivername(recivername);
+		emails.setIstrash("not");
+		emails.setIsread("未读");
+		emails.setIsinbox("is");
+		if(emails.getEid()!=null){
+			eser.updateByEidInBox(emails);
+		}else{
+			eser.insertEmails(emails);
+		}
+		return "forward:/user/draftBox.action";
+	}
+	/*
+	 * 编辑草稿箱指定邮件
+	 */
+	@RequestMapping("/boxMailEdit.action/{eid}")
+	public String boxEmailEdit(@PathVariable(value = "eid") Integer eid,HttpSession session){
+		Emails emails=new Emails();
+		emails.setEid(eid);
+		emails=eser.findEmailsByEid(emails);
+		session.setAttribute("emails", emails);
+		List<User> userList=ser.findAllUser();
+		session.setAttribute("userList", userList);
+		return "draftEmail";
+	}
 	/*
 	 * 发送邮件
 	 */
@@ -48,7 +137,6 @@ public class EmailsAction {
 	@RequestMapping(value="/sendEmails.action",produces="plain/text;charset=UTF-8")
 	public  String saveFile(@RequestParam("file")MultipartFile file,Emails emails,User user,HttpSession session) throws IOException {
 		//接收上传部分提交的数据,包含文件
-		emails.setEnclosure("无附件");
 		if (!file.isEmpty())
 		{
 			file.transferTo(new File("D:/temp/"+file.getOriginalFilename()));
@@ -59,13 +147,11 @@ public class EmailsAction {
 			emails.setSendtime(sendtime);
 			emails.setIstrash("not");
 			emails.setIsread("未读");
+			emails.setIsinbox("not");
 			eser.insertEmails(emails);
-
-			ser.updateUser(user);
-			User findUser = ser.findByName(user);
-			session.setAttribute("sessionUser", findUser);
 			return "forward:/user/toindex.do";
 	}
+
 
 	/*
 	 * 转到展示个人邮件页
@@ -125,8 +211,21 @@ public class EmailsAction {
 	public String EmailsDel(@PathVariable(value = "eid") Integer eid){
 		Emails emails=new Emails();
 		emails.setEid(eid);
-		eser.deleteByEidReal(emails);
-		return "redirect:/user/mailGarage!garage.action";
+		emails=eser.findEmailsByEid(emails);
+		if(emails.getIsinbox().equals("is")){
+			eser.deleteByEidReal(emails);
+			return "redirect:/user/draftBox.action";
+		}else{
+
+			if(emails.getIstrash().equals("is")){
+				eser.deleteByEidReal(emails);
+				return "redirect:/user/mailGarage!garage.action";
+			}else{
+				eser.deleteByEidReal(emails);
+				return "redirect:/user/hadSendEmails.action";
+			}
+
+		}
 	}
 	
 	
@@ -139,14 +238,12 @@ public class EmailsAction {
 		emails.setEid(eid);
 		eser.updateByEidRead(emails);
 		emails=eser.findEmailsByEid(emails);
-		if(emails!=null){
 			User findUser=new User();
 			findUser.setUid(emails.getSenderid());
 			findUser=ser.findByUid(findUser);
 			session.setAttribute("findUser", findUser);
 			session.setAttribute("emails", emails);
-		}
-		
+
 		return "readEmails";
 	}
 	/*

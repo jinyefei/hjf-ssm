@@ -7,7 +7,7 @@ import com.hjf.pojo.po.User;
 
 public interface IUserService {
 	User findByName(User user);
-
+	User findByNameOwn(User user);
 	void updateUser(User user);
 
 	List<User> findAllUser();
@@ -21,5 +21,8 @@ public interface IUserService {
 	List<User> findAllAccount();
 
 	void insertUserAccount(User user);
+
+    void deleteByUid(User user);
+
 
 }

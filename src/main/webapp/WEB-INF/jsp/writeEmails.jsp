@@ -67,7 +67,13 @@
 				onclick="this.parentNode.className=this.parentNode.className=='open'?'':'open';">
 				邮件管理</dt>
 			<dd>
+				<a href="${pageContext.request.contextPath}/user/draftBox.action" target="_self">草稿箱</a>
+			</dd>
+			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailWrite.action" target="_self">写邮件</a>
+			</dd>
+			<dd>
+				<a href="${pageContext.request.contextPath}/user/hadSendEmails.action" target="_self">已发邮件</a>
 			</dd>
 			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailReceive!receive.action" target="_self">收邮件</a>
@@ -130,7 +136,7 @@
 							</tr>
 							<tr>
 								<td align="right" width="30%"  >邮件内容：</td>
-								<td align="left"><textarea  name="econtext" id="econtext"
+								<td align="left"><textarea  name="econtext" id="econtext" rows="10" cols="23"
 									  style="resize:none;"></textarea>
 									  </td>
 							</tr>
@@ -143,10 +149,14 @@
 								</td>
 							</tr>
 							<tr>
-								<td   align="left" style="padding-left:242px;"  colspan="2"><br />
+								<td   align="left" style="padding-left:150px;"  colspan="2"><br />
 								 <input type="hidden" name="senderid" value="${sessionUser.uid}"> 
-								 <input type="hidden" name="uname" value="${sessionUser.uname}">
-									<input type="submit" id="save" value="发送邮件"/>
+								 <input type="hidden" name="sendername" value="${sessionUser.uname}">
+									<input type="submit" id="send" value="发送邮件"/>
+									&nbsp;
+									<input type="submit" id="save" value="保存至草稿箱"
+										   onclick="myForm.action='${pageContext.request.contextPath}/user/saveEmailsToBox.action'"
+									/>
 									&nbsp;
 									<input type="button" id="back" value="取消编写"  onclick="location='${pageContext.request.contextPath}/user/toindex.do' " />
 								</td>
@@ -186,5 +196,19 @@
     function handleFile(){
         fileName.value = file.value;
     }
-</script>
+    var max_size = 9437184;
+    $("#file").change(function(evt) {
+        var finput = $(this);
+        var files = evt.target.files;
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+            if (f.size > max_size) {
+                fileName.value=""
+                alert("上传文件不能超过9M");
+                $(this).val('');
+            }
+        }
+    });
+
+</script>>
 </html>

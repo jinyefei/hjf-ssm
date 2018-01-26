@@ -64,7 +64,13 @@
 				onclick="this.parentNode.className=this.parentNode.className=='open'?'':'open';">
 				邮件管理</dt>
 			<dd>
+				<a href="${pageContext.request.contextPath}/user/draftBox.action" target="_self">草稿箱</a>
+			</dd>
+			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailWrite.action" target="_self">写邮件</a>
+			</dd>
+			<dd>
+				<a href="${pageContext.request.contextPath}/user/hadSendEmails.action" target="_self">已发邮件</a>
 			</dd>
 			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailReceive!receive.action" target="_self">收邮件</a>
@@ -101,23 +107,25 @@
 				</html>
 
 				<div class="action">
-					<div class="t">邮件信息列表</div>
+					<div class="t">我的考勤</div>
 					<div class="pages">
 						<table width="90%" border="0" cellspacing="0" cellpadding="0"
-							id="emailstable">
+							id="mytable">
 							<tr>
 								<td align="center" width="14%" height="20px">申请人</td>
 								<td align="center" width="14%" height="20px">开始时间</td>
 								<td align="center" width="14%" height="20px">结束时间</td>
 								<td align="center" width="14%" height="20px">天数</td>
-								<td align="center" width="14%" height="20px">审批状态</td>
 								<td align="center" width="14%" height="20px">原因</td>
-								<c:if test="${sessionUser.ismanage eq '管理员'}">
-									<td align="center" width="16%" height="20px">操作</td>
-								</c:if>
+								<td align="center" width="14%" height="20px">审批状态</td>
 
+								<td align="center" width="16%" height="20px">
+									<input type="button"
+										   onclick="window.location.href='${pageContext.request.contextPath}/user/applyVacation.action'"
+										   value="申请休假">
+								</td>
 							</tr>
-							<c:forEach items="${vacationList}" var="vacation">
+							<c:forEach items="${vacationListOwn}" var="vacation">
 								<tr>
 									<td align="center" width="14%" height="20px">
 										${vacation.applyername}</td>
@@ -128,27 +136,70 @@
 									<td align="center" width="14%" height="20px">
 										${vacation.totalday}</td>
 									<td align="center" width="14%" height="20px">
-										${vacation.isagree}</td>
+											${vacation.resons}</td>
 									<td align="center" width="14%" height="20px">
-										${vacation.resons}</td>
+										${vacation.isagree}</td>
 
-									<c:if test="${sessionUser.ismanage eq '管理员'&& sessionUser.uid != vacation.applyerid}">
+
+
+
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+				</div>
+
+				<c:if test="${sessionUser.ismanage eq '管理员'}">
+				<div class="action">
+					<div class="t">考勤审核列表</div>
+					<div class="pages">
+						<table width="90%" border="0" cellspacing="0" cellpadding="0"
+							   id="checktable">
+							<tr>
+								<td align="center" width="14%" height="20px">申请人</td>
+								<td align="center" width="14%" height="20px">开始时间</td>
+								<td align="center" width="14%" height="20px">结束时间</td>
+								<td align="center" width="14%" height="20px">天数</td>
+								<td align="center" width="14%" height="20px">原因</td>
+								<td align="center" width="14%" height="20px">审批状态</td>
+
+								<td align="center" width="16%" height="20px">操作</td>
+							</tr>
+							<c:forEach items="${vacationListOther}" var="vacation">
+								<tr>
+									<td align="center" width="14%" height="20px">
+											${vacation.applyername}</td>
+									<td align="center" width="14%" height="20px">
+											${vacation.starttime}</td>
+									<td align="center" width="14%" height="20px">
+											${vacation.endtime}</td>
+									<td align="center" width="14%" height="20px">
+											${vacation.totalday}</td>
+									<td align="center" width="14%" height="20px">
+											${vacation.resons}</td>
+									<td align="center" width="14%" height="20px">
+											${vacation.isagree}</td>
+
+
+									<c:if test="${vacation.isagree eq '未审核'}">
 										<td align="center" width="16%" height="20px">
 											<input type="button"
 												   onclick="window.location.href='${pageContext.request.contextPath}/user/checkVacation.action/${vacation.vid}'"
-												   value="[审核]">
+												   value="[待审核]">
+										</td>
+									</c:if>
+									<c:if test="${vacation.isagree != '未审核'}">
+										<td align="center" width="16%" height="20px">
+											<input type="button" value="已审核">
 										</td>
 									</c:if>
 								</tr>
 							</c:forEach>
 						</table>
-						<input type="button"
-							onclick="window.location.href='${pageContext.request.contextPath}/user/applyVacation.action'"
-							value="申请休假">
-
 
 					</div>
 				</div>
+				</c:if>
 			</div>
 		</div>
 	</form>

@@ -28,22 +28,22 @@ public class VacationAction {
 	@Autowired
 	IVacationService vser;
 
-	//转到展示假期记录的控制器
+	//转到展示假期记录的控制器   vacationListOther  vacationListOwn
 	@RequestMapping(value="/leave.action")
 	public String toLeave(HttpSession session){
 		User findUser=(User) session.getAttribute("sessionUser");
 		if(findUser!=null){
-			List<Vacation> vacationList1=new ArrayList();
+			List<Vacation> vacationListOther=new ArrayList();
 			if(findUser.getIsmanage().equals("管理员")){
 				Integer agreemanid=findUser.getUid();
-				vacationList1=vser.findAllVacationCheck(agreemanid);
+				vacationListOther=vser.findAllVacationCheck(agreemanid);
+				session.setAttribute("vacationListOther", vacationListOther);
 			}
 				Integer applyerid=findUser.getUid();
 				Vacation vacation=new Vacation();
 				vacation.setApplyerid(applyerid);
-				List<Vacation> vacationList=vser.findAllVacation(vacation);				
-				vacationList.addAll(vacationList1);
-				session.setAttribute("vacationList", vacationList);				
+				List<Vacation> vacationListOwn=vser.findAllVacation(vacation);
+				session.setAttribute("vacationListOwn", vacationListOwn);
 		}
 		return "showApply";
 	}

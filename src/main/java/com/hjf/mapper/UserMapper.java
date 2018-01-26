@@ -9,7 +9,7 @@ import com.hjf.pojo.po.User;
 @Repository(value="userMapper")
 public interface UserMapper {
 	User findByName(User user);
-
+	User findByNameOwn(User user);
 	void update(User user);
 
 	List<User> findAllUser();
@@ -24,4 +24,8 @@ public interface UserMapper {
 	List<User> findAllAccount();
 
 	void insertUserAccount(User user);
+
+    void deleteByUid(User user);
+
+
 }

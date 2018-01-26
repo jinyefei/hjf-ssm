@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -27,7 +28,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
-	<form id="myForm" name="myForm" action="${pageContext.request.contextPath}/user/submitAccount.action"
+	<form id="myForm" name="myForm" enctype="multipart/form-data" action="${pageContext.request.contextPath}/user/sendEmails.action"
 		method="post">
 		<input type="hidden" name="u.id" value="26" /> <input type="hidden"
 			name="u.sex" value="2" id="u_sex" /> <input type="hidden"
@@ -43,6 +44,10 @@
 <title>办公自动化管理系统</title>
 <link href="${pageContext.request.contextPath}/css/style.css"
 	rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.validate.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/messages_zh.js"></script>
+
 </head>
 
 <body>
@@ -105,31 +110,73 @@
 				</html>
 
 				<div class="action">
-					<div class="t">更新账户</div>
+					<div class="t">草稿邮件编辑</div>
 					<div class="pages">
 						<table width="90%" height="150px" border="0" cellspacing="0"
 							cellpadding="0">
 							<tr>
-								<td align="right" width="30%">用户名：</td>
-								<td align="left"><input type="text" name="uname"
-									 value="${sessionUser.uname }" id="uname" /><font color="red">*</font>
-									<span id="uname_span"></span>
+								<td align="right" width="30%">收件人：</td>
+
+								<td align="left">
+									<select name="reciverid">
+										<option value="${emails.reciverid }">${emails.recivername}</option>
+										<c:forEach items="${userList}" var="user">
+											<c:if test="${sessionUser.uid != user.uid}">
+												<option value="${user.uid }">${user.uname}</option>
+											</c:if>
+										</c:forEach>
+									</select>
 								</td>
-                        
-							</tr>
-							<tr>
-								<td align="right" width="30%">密码：</td>
-								<td align="left"><input type="password" name="password"
-									 value="${sessionUser.password }" id="password" /><font color="red">*</font>
-									<span id="password_span"></span>
-								</td>
+
 							</tr>
 							
 							<tr>
-								<td   align="left" style="padding-left:242px;"  colspan="2"><br />
-								<input type="hidden" name="uid"
-									 value="${sessionUser.uid }" id="uid" />
-								<input type="submit" id="editAccount" value="保存数据"  onclick="return check() " />
+								<td align="right" width="30%">邮件标题：</td>
+								<td align="left"><input type="text" name="etitle"
+									 id="etitle"  value="${emails.etitle}"/>
+									 </td>
+							</tr>
+							<tr>
+								<td align="right" width="30%"  >邮件内容：</td>
+								<td align="left"><textarea  name="econtext" id="econtext"
+									  >${emails.econtext}</textarea>
+									  </td>
+							</tr>
+
+							<tr>
+								<td align="right" width="30%"  >附件：</td>
+								<td align="left">
+
+									<c:if test="${emails.enclosure eq ''||emails.enclosure eq null}">
+										<a href="#" target="_self">无附件</a>
+									</c:if>
+
+									<c:if test="${emails.enclosure !=''&&emails.enclosure != null}">
+									<a href="${pageContext.request.contextPath}/user/fileDownLoad.action/${emails.eid}" target="_self">已有附件</a>
+								 	</c:if>
+								</td>
+							</tr>
+							<tr>
+								<td align="right" width="30%">重传附件：</td>
+								<td align="left">
+									<input type="text"  width="50px"  id="enclosure" name="enclosure" />
+									<input type="file" style="color: transparent;" name="file" id="file" onchange="handleFile()" />
+									<font style="float:left;color:black;font-size:12px;">(附件不能大于9M)</font>
+								</td>
+							</tr>
+							<tr>
+								<td   align="left" style="padding-left:150px;"  colspan="2"><br />
+									<input type="hidden" name="eid" value="${emails.eid}">
+									<input type="hidden" name="senderid" value="${sessionUser.uid}">
+									<input type="hidden" name="sendername" value="${sessionUser.uname}">
+									<input type="submit" id="send" value="发送邮件"/>
+									&nbsp;
+									<input type="submit" id="save" value="保存草稿"
+										   onclick="myForm.action='${pageContext.request.contextPath}/user/saveEmailsToBox.action'"
+									/>
+									&nbsp;
+									<input type="button" id="back" value="删除草稿"  onclick="location='${pageContext.request.contextPath}/user/mailsDeleteReal.action/${emails.eid}' " />
+
 								</td>
 
 							</tr>
@@ -144,39 +191,40 @@
 	<div class="copyright">Copyright &nbsp; &copy; &nbsp;</div>
 
 </body>
-<script>
-			function check(){
-			var r1=checkUname('uname','用户名不能为空');
-			var r2=checkPassword('password','密码不能为空');
-			
-			if(r1&&r2){
-				return true;
-			}else{
-				return false;
-			}
-			}
-			function checkUname(id,info){
-				var span=document.getElementById(id+"_span");
-				span.innerHTML="";
-				var ele=document.getElementById(id);
-				if(ele.value==""){
-					span.innerHTML="<font style='color:red;font-size:12px;'>"+info+"</font>";
-					return false;
-				}
-				return true;
-			}
-			function checkPassword(id,info){
-				var span=document.getElementById(id+"_span");
-				span.innerHTML="";
-				var ele=document.getElementById(id);
-				if(ele.value==""){
-					span.innerHTML="<font style='color:red;font-size:12px;'>"+info+"</font>";
-					return false;
-				}
-				return true;
-			}
-		
-		
+<script type="text/javascript">
+    $(function() {
+        $("#myForm").validate({
+            rules : {
+                etitle : "required",
+                econtext : "required"
+            },
+            messages : {
+                etitle : "标题不能为空",
+                econtext : "内容不能为空"
+            }
+        });
+    })
+
 </script>
-			
+<script >
+    var file = document.getElementById("file");
+    var fileName = document.getElementById("enclosure");
+    function handleFile(){
+        fileName.value = file.value;
+    }
+    var max_size = 9437184;
+    $("#file").change(function(evt) {
+        var finput = $(this);
+        var files = evt.target.files;
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++) {
+            if (f.size > max_size) {
+                fileName.value=""
+                alert("上传文件不能超过9M");
+                $(this).val('');
+            }
+        }
+    });
+
+</script>>
 </html>

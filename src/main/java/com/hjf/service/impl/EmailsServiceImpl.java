@@ -51,4 +51,19 @@ public class EmailsServiceImpl implements IEmailsService {
 		return eMapper.findEmailsByEid(emails);
 	}
 
+	@Override
+	public List<Emails> findAllEmailsBox(Emails emails) {
+		return eMapper.findAllEmailsBox(emails);
+	}
+
+	@Override
+	public void updateByEidInBox(Emails emails) {
+		eMapper.updateByEidInBox(emails);
+	}
+
+	@Override
+	public List<Emails> findAllEmailsNotBox(Emails emails) {
+		return eMapper.findAllEmailsNotBox(emails);
+	}
+
 }

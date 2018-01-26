@@ -75,7 +75,7 @@ public class UserAction {
 	/*@ResponseBody 上传下载文件可用*/
 	public String doUpdate(User user,HttpSession session){
 		ser.updateUser(user);
-		User findUser = ser.findByName(user);
+		User findUser = ser.findByNameOwn(user);
 		session.setAttribute("sessionUser", findUser);
 		return "forward:/user/toindex.do";
 	}
@@ -98,10 +98,9 @@ public class UserAction {
 	 * 提交更新个人账户信息
 	 */
 	@RequestMapping(value="/submitAccount.action",produces="plain/text;charset=UTF-8")
-	/*@ResponseBody 上传下载文件可用*/
 	public String doEditAcount(User user,HttpSession session){
 		ser.updateUserAccount(user);
-		User findUser = ser.findByName(user);
+		User findUser = ser.findByNameOwn(user);
 		session.setAttribute("sessionUser", findUser);
 		return "forward:/user/userInfo!singleAccountData.action";
 	}
@@ -127,7 +126,12 @@ public class UserAction {
 	 */
 	@RequestMapping(value="/submitAddAccount.action",produces="plain/text;charset=UTF-8")
 	public String doAddAcount(User user,HttpSession session){
-		user.setIsmanage("普通员工");
+		if(user.getIsmanage()==null){
+			user.setIsmanage("普通员工");
+		}
+		if(user.getUgender()==null){
+			user.setUgender("待补充");
+		}
 		ser.insertUserAccount(user);
 		return "forward:/user/userInfo!manageAccountData.action";
 	}
@@ -144,5 +148,34 @@ public class UserAction {
 			}else{
 				return "0";//校验不通过
 			}
+	}
+	/*
+	 * 删除指定个人账户
+	 */
+	@RequestMapping("/deleteAccount.action/{uid}")
+	public String deleteAccount(@PathVariable(value = "uid") Integer uid){
+		User user=new User();
+		user.setUid(uid);
+		ser.deleteByUid(user);
+		return "forward:/user/userInfo!manageAccountData.action";
+	}
+	/*
+	 * 转到待更新指定个人账户页面
+	 */
+	@RequestMapping("/changeAccount.action/{uid}")
+	public String changeAccount(@PathVariable(value = "uid") Integer uid,HttpSession session){
+		User updateUser=new User();
+		updateUser.setUid(uid);
+		updateUser=ser.findByUid(updateUser);
+		session.setAttribute("updateUser",updateUser);
+		return "editAccountByUid";
+	}
+	/*
+	 * 更新指定个人账户
+	 */
+	@RequestMapping("/changeAccountByUid.action")
+	public String updateAccount(User user){
+		ser.updateUser(user);
+		return "forward:/user/userInfo!manageAccountData.action";
 	}
 }

@@ -66,7 +66,13 @@
 				onclick="this.parentNode.className=this.parentNode.className=='open'?'':'open';">
 				邮件管理</dt>
 			<dd>
+				<a href="${pageContext.request.contextPath}/user/draftBox.action" target="_self">草稿箱</a>
+			</dd>
+			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailWrite.action" target="_self">写邮件</a>
+			</dd>
+			<dd>
+				<a href="${pageContext.request.contextPath}/user/hadSendEmails.action" target="_self">已发邮件</a>
 			</dd>
 			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailReceive!receive.action" target="_self">收邮件</a>

@@ -64,7 +64,13 @@
 				onclick="this.parentNode.className=this.parentNode.className=='open'?'':'open';">
 				邮件管理</dt>
 			<dd>
+				<a href="${pageContext.request.contextPath}/user/draftBox.action" target="_self">草稿箱</a>
+			</dd>
+			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailWrite.action" target="_self">写邮件</a>
+			</dd>
+			<dd>
+				<a href="${pageContext.request.contextPath}/user/hadSendEmails.action" target="_self">已发邮件</a>
 			</dd>
 			<dd>
 				<a href="${pageContext.request.contextPath}/user/mailReceive!receive.action" target="_self">收邮件</a>
@@ -106,17 +112,28 @@
 						<table width="90%" border="0" cellspacing="0" cellpadding="0"
 							id="accountTable">
 							<tr>
-								<td align="center" width="25%" height="20px">用户名：</td>
-								<td align="center" width="25%" height="20px">昵称：</td>
-								<td align="center" width="25%" height="20px">手机：</td>
-								<td align="center" width="25%" height="20px">地址：</td>
+								<td align="center" width="16%" height="25px">用户名：</td>
+								<td align="center" width="16%" height="25px">昵称：</td>
+								<td align="center" width="16%" height="25px">手机：</td>
+								<td align="center" width="16%" height="25px">地址：</td>
+								<td align="center" width="16%" height="25px">权限：</td>
+								<td align="right" width="20%" height="25px">账户操作：</td>
 							</tr>
 							<c:forEach items="${accountList}" var="account">
 								<tr>
-									<td align="center" width="25%" height="20px">${account.uname }</td>
-									<td align="center" width="25%" height="20px">${account.nickname }</td>
-									<td align="center" width="25%" height="20px">${account.uphone }</td>
-									<td align="center" width="25%" height="20px">${account.uaddr }</td>
+									<td align="center" width="16%" height="25px">${account.uname }</td>
+									<td align="center" width="16%" height="25px">${account.nickname }</td>
+									<td align="center" width="16%" height="25px">${account.uphone }</td>
+									<td align="center" width="16%" height="25px">${account.uaddr }</td>
+									<td align="center" width="16%" height="25px">${account.ismanage }</td>
+									<td align="right" width="20%" height="25px">
+										<input type="button" id="updateAccount" value="更新"
+											   onclick="location='${pageContext.request.contextPath}/user/changeAccount.action/${account.uid}' "/>
+										|
+										<input type="button" id="deleteAccount" value="删除"
+											   onclick="location='${pageContext.request.contextPath}/user/deleteAccount.action/${account.uid}' "/>
+
+									</td>
 								</tr>
 							</c:forEach>
 						</table>

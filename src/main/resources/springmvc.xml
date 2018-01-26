@@ -40,14 +40,35 @@
 	<!--4 文件上传解析器
     文件上传依赖jar，pom文件添加依赖-->
 
-	<!--multipartResolver配置-->
+	<!--multipartResolver配置
 	<bean id="multipartResolver"
 		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
 		  p:defaultEncoding="UTF-8"
 		  p:maxUploadSize="9437184"
 		  p:maxInMemorySize="9437184"
 		  p:uploadTempDir="file:/d:/temp"
-	/>
+	/>-->
+	<!-- 配置文件上传类型解析器 multipartResolver-->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/*"/>
+			<bean class="com.hjf.interceptor.FileUploadInterceptor">
+				<!-- 设定限制的文件上传大小 -->
+				<property name="maxSize" value="9437184"/>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<!-- 1.在文件上传解析时发现异常，此时还没有进入到Controller方法中 -->
+	<!--<bean id="exceptionResolver" class= "org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				&lt;!&ndash; 遇到MaxUploadSizeExceededException异常时，跳转到error.jsp页面  &ndash;&gt;
+				<prop key= "org.springframework.web.multipart.MaxUploadSizeExceededException">/error </prop>
+			</props>
+		</property>
+	</bean>-->
 
 	<!-- 设置json和response的字符编码 -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">

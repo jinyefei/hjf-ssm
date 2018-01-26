@@ -27,4 +27,10 @@ public interface EmailsMapper {
 	void updateByEidRead(Emails emails);
 
 	Emails findEmailsByEid(Emails emails);
+
+    List<Emails> findAllEmailsBox(Emails emails);
+
+    void updateByEidInBox(Emails emails);
+
+    List<Emails> findAllEmailsNotBox(Emails emails);
 }

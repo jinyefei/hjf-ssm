@@ -32,7 +32,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
-	<form id="myForm" name="myForm"  action= "${pageContext.request.contextPath}/user/submitAddAccount.action"
+	<form id="myForm" name="myForm"  action= "${pageContext.request.contextPath}/user/changeAccountByUid.action"
 		method="post">
 		<input type="hidden" name="u.id" value="26" /> <input type="hidden"
 			name="u.sex" value="2" id="u_sex" /> <input type="hidden"
@@ -110,14 +110,14 @@
 				</html>
 
 				<div class="action">
-					<div class="t">添加账号</div>
+					<div class="t">账户信息</div>
 					<div class="pages">
 						<table width="90%" height="150px" border="0" cellspacing="0"
 							cellpadding="0">
 							<tr>
 								<td align="right" width="30%">用户名：</td>
 								<td align="left"><input type="text" name="uname"
-								 id="uname" /><span
+								 id="uname" value="${updateUser.uname}" /><span
 										id="mess"></span>
 								</td>
                         
@@ -125,49 +125,68 @@
 							<tr>
 								<td align="right" width="30%">密码：</td>
 								<td align="left"><input type="password" name="password"
-									 id="password" />
+								value="${updateUser.password}"	 id="password" />
 								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">昵称：</td>
 								<td align="left"><input type="text" name="nickname"
-								 id="nickname" />
+								 id="nickname"  value="${updateUser.nickname}" />
 								</td>
                         
 							</tr>
 							<tr>
 								<td align="right" width="30%">年龄：</td>
 								<td align="left"><input type="text" name="uage"
-								 id="uage" />
+								 id="uage" value="${updateUser.uage}" />
 								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">性别：</td>
 								<td align="left">
+									<c:if test="${updateUser.ugender eq '男'}">
+										<input type="radio" value="男" name="ugender" checked="checked"> 男
+										<input type="radio" value="女" name="ugender"> 女
+									</c:if>
+									<c:if test="${updateUser.ugender eq '女'}">
+										<input type="radio" value="男" name="ugender"> 男
+										<input type="radio" value="女" name="ugender" checked="checked"> 女
+									</c:if>
+									<c:if test="${updateUser.ugender eq '待补充'}">
 										<input type="radio" value="男" name="ugender"> 男
 										<input type="radio" value="女" name="ugender"> 女
+									</c:if>
+
 								</td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">手机：</td>
 								<td align="left"><input type="text" name="uphone"
-								 id="uphone" /> <span
+								 id="uphone" value="${updateUser.uphone}" /> <span
 									id="uphone_span"></span></td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">地址：</td>
 								<td align="left"><input type="text" name="uaddr"
-								 id="uaddr" /></td>
+								 id="uaddr" value="${updateUser.uaddr}" /></td>
 							</tr>
 							<tr>
 								<td align="right" width="30%">权限：</td>
 								<td align="left">
-									<input type="radio" value="管理员" name="ismanage"> 管理员
-									<input type="radio" value="普通员工" name="ismanage"> 非管理员
+									<c:if test="${updateUser.ismanage eq '管理员'}">
+										<input type="radio" value="管理员" name="ismanage" checked="checked"> 管理员
+										<input type="radio" value="普通员工" name="ismanage"> 普通员工
+									</c:if>
+									<c:if test="${updateUser.ismanage eq '普通员工'}">
+										<input type="radio" value="管理员" name="ismanage"> 管理员
+										<input type="radio" value="普通员工" name="ismanage" checked="checked"> 普通员工
+									</c:if>
 								</td>
 							</tr>
 							<tr>
 								<td align="left" style="padding-left: 242px;" colspan="2"><br />
+									<input type="hidden" name="uid"
+										   id="uid"  value="${updateUser.uid}" />
 									<input type="submit" id="save" value="保存数据" onclick="check()"
 									 /> <input type="button" id="back"
 									value="返回" onclick="location='${pageContext.request.contextPath}/user/userInfo!manageAccountData.action' " /></td>

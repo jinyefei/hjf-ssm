@@ -9,9 +9,29 @@ public class Emails {
 	private String enclosure;
 	private Integer senderid;
 	private Integer reciverid;
+	private String sendername;
+	private String recivername;
 	private Date sendtime;
 	private String istrash;
 	private String isread;
+	private String isinbox;
+
+	public String getSendername() {
+		return sendername;
+	}
+
+	public void setSendername(String sendername) {
+		this.sendername = sendername;
+	}
+
+	public String getRecivername() {
+		return recivername;
+	}
+
+	public void setRecivername(String recivername) {
+		this.recivername = recivername;
+	}
+
 	public String getEtitle() {
 		return etitle;
 	}
@@ -23,6 +43,14 @@ public class Emails {
 	}
 	public void setEcontext(String econtext) {
 		this.econtext = econtext;
+	}
+
+	public String getIsinbox() {
+		return isinbox;
+	}
+
+	public void setIsinbox(String isinbox) {
+		this.isinbox = isinbox;
 	}
 
 	public String getEnclosure() {

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,7 +12,7 @@
 
 </head>
 
-<body>
+<body onload="IniEvent()">
 	<div class="top">
 		<div class="global-width">
 			<img src="${pageContext.request.contextPath}/Images/logo.gif"
@@ -27,7 +28,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
-	<form id="myForm" name="myForm" action="${pageContext.request.contextPath}/user/submitAccount.action"
+	<form id="myForm" name="myForm" action="${pageContext.request.contextPath}/user/sendEmails.action"
 		method="post">
 		<input type="hidden" name="u.id" value="26" /> <input type="hidden"
 			name="u.sex" value="2" id="u_sex" /> <input type="hidden"
@@ -105,34 +106,32 @@
 				</html>
 
 				<div class="action">
-					<div class="t">更新账户</div>
+					<div class="t">草稿箱邮件列表</div>
 					<div class="pages">
-						<table width="90%" height="150px" border="0" cellspacing="0"
-							cellpadding="0">
+						<table width="90%" border="0" cellspacing="0" cellpadding="0"
+							id="emailstable">
 							<tr>
-								<td align="right" width="30%">用户名：</td>
-								<td align="left"><input type="text" name="uname"
-									 value="${sessionUser.uname }" id="uname" /><font color="red">*</font>
-									<span id="uname_span"></span>
-								</td>
-                        
+								<td align="center" width="25%" height="20px">邮件标题：</td>
+								<td align="center" width="25%" height="20px">邮件内容：</td>
+								<td align="center" width="25%" height="20px">收件人：</td>
+								<td align="center" width="25%" height="20px">操作：</td>
 							</tr>
-							<tr>
-								<td align="right" width="30%">密码：</td>
-								<td align="left"><input type="password" name="password"
-									 value="${sessionUser.password }" id="password" /><font color="red">*</font>
-									<span id="password_span"></span>
-								</td>
-							</tr>
-							
-							<tr>
-								<td   align="left" style="padding-left:242px;"  colspan="2"><br />
-								<input type="hidden" name="uid"
-									 value="${sessionUser.uid }" id="uid" />
-								<input type="submit" id="editAccount" value="保存数据"  onclick="return check() " />
-								</td>
+							<c:forEach items="${boxEmailsList}" var="emails">
+								<tr>
+									<td align="center" width="25%" height="20px">
+									${emails.etitle}</td>
+									<td align="center" width="25%" height="20px">${emails.econtext }</td>
+									<td align="center" width="25%" height="20px">${emails.recivername }</td>
+									<td align="center" width="25%" height="20px">
+										<a href="${pageContext.request.contextPath}/user/boxMailEdit.action/${emails.eid}"
+										>编辑</a>|
+										<a href="${pageContext.request.contextPath}/user/mailsDeleteReal.action/${emails.eid}"
+										   onclick="return confirm('确实执行此操作?')">删除</a>
+									</td>
+								</tr>
+							</c:forEach>
 
-							</tr>
+
 
 						</table>
 
@@ -145,38 +144,66 @@
 
 </body>
 <script>
-			function check(){
-			var r1=checkUname('uname','用户名不能为空');
-			var r2=checkPassword('password','密码不能为空');
-			
-			if(r1&&r2){
-				return true;
-			}else{
-				return false;
-			}
-			}
-			function checkUname(id,info){
-				var span=document.getElementById(id+"_span");
-				span.innerHTML="";
-				var ele=document.getElementById(id);
-				if(ele.value==""){
-					span.innerHTML="<font style='color:red;font-size:12px;'>"+info+"</font>";
-					return false;
-				}
-				return true;
-			}
-			function checkPassword(id,info){
-				var span=document.getElementById(id+"_span");
-				span.innerHTML="";
-				var ele=document.getElementById(id);
-				if(ele.value==""){
-					span.innerHTML="<font style='color:red;font-size:12px;'>"+info+"</font>";
-					return false;
-				}
-				return true;
-			}
-		
-		
+	function check() {
+		var r1 = checkTitle('etitle', '标题不能为空');
+		var r2 = checkEcontext('econtext', '内容不能为空');
+
+		if (r1 && r2) {
+			document.forms[0].submit();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function checkTitle(id, info) {
+		var span = document.getElementById(id + "_span");
+		span.innerHTML = "";
+		var ele = document.getElementById(id);
+		if (ele.value == "") {
+			span.innerHTML = "<font style='color:red;font-size:12px;'>" + info
+					+ "</font>";
+			return false;
+		}
+		return true;
+	}
+	function checkEcontext(id, info) {
+		var span = document.getElementById(id + "_span");
+		span.innerHTML = "";
+		var ele = document.getElementById(id);
+		if (ele.value == "") {
+			span.innerHTML = "<font style='color:red;font-size:12px;'>" + info
+					+ "</font>";
+			return false;
+		}
+		return true;
+	}
 </script>
-			
+<script type="text/javascript">
+	function IniEvent() {
+		var tbl = document.getElementById("emailstable");
+		var trs = tbl.getElementsByTagName("tr");
+		for (var i = 0; i < trs.length; i++) {
+			trs[i].onmouseover = Trmouseover;
+			trs[i].onmouseout = Trmouseout;
+		}
+	}
+	function Trmouseover() {
+		var tbl = document.getElementById("emailstable");
+		var trs = tbl.getElementsByTagName("tr");
+		for (var i = 0; i < trs.length; i++) {
+			if (trs[i] == this) { //判断是不是当前选择的行
+				trs[i].style.background = "grey";
+			} else {
+				trs[i].style.background = "white";
+			}
+		}
+	}
+	function Trmouseout() {
+		var tbl = document.getElementById("emailstable");
+		var trs = tbl.getElementsByTagName("tr");
+		for (var i = 0; i < trs.length; i++) {
+			trs[i].style.background = "white";
+		}
+	}
+</script>
 </html>
